@@ -1,4 +1,4 @@
-#!/usr/bin/env pyhton3
+#!/usr/bin/env python3
 """
 Task
 7. Complex types - string and int/float to tuple
