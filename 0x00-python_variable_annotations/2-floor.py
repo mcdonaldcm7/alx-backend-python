@@ -11,6 +11,6 @@ import math
 
 def floor(n: float) -> float:
     """
-    Return: floored value of n
+    Returns the floored value of the argument n
     """
     return math.floor(n)
