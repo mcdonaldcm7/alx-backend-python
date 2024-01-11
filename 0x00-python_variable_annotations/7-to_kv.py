@@ -11,7 +11,7 @@ should be annotated as a float.
 from typing import List, Union, Tuple
 
 
-def to_kv(k: str, v: Union[float, int]) -> Tuple[str, float]:
+def to_kv(k: str, v: Union[int, float]) -> Tuple[str, float]:
     """
     Return: A tuple with first key k and second key v ** 2
     """
