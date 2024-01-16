@@ -26,4 +26,10 @@ async def wait_n(n: int, max_delay: int) -> typing.List[float]:
     coroutines = [wait_random(max_delay) for _ in range(n)]
     results = [await coro for coro in asyncio.as_completed(coroutines)]
     # results = await asyncio.gather(*coroutines)
+
+    # Manual sorting (Bubble Sort)
+    for i in range(len(results)):
+        for j in range(0, len(results) - i - 1):
+            if results[j] > results[j + 1]:
+                results[j], results[j + 1] = results[j + 1], results[j]
     return results
