@@ -23,9 +23,14 @@ async def wait_n(n: int, max_delay: int) -> typing.List[float]:
     Returns an ordered list of time the coroutines returned after being called
     n times with max_delay
     """
-    coroutines = [wait_random(max_delay) for i in range(n)]
+    coroutines = []
+    async with asyncio.TaskGroup() as tg:
+        for _ in range(n):
+            coroutines.append(tg.create_task(wait_random(max_delay)))
+
     results = []
     for coroutine in asyncio.as_completed(coroutines):
-        result = await coroutine
-        results.append(result)
+        earliest_result = await coroutine
+        results.append(earliest_result)
+    results = await asyncio.gather(*coroutines)
     return results
