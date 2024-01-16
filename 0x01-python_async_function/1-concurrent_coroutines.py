@@ -32,5 +32,5 @@ async def wait_n(n: int, max_delay: int) -> typing.List[float]:
     for coroutine in asyncio.as_completed(coroutines):
         earliest_result = await coroutine
         results.append(earliest_result)
-    results = await asyncio.gather(*coroutines)
+    #results = await asyncio.gather(*coroutines)
     return results
