@@ -76,7 +76,8 @@ class TestGetJson(unittest.TestCase):
         ("http://holberton.io", {"payload": False})
         ])
     @patch("requests.get")
-    def test_get_json(self, test_url: str, test_return: Dict, mock_get: Any):
+    def test_get_json(self, test_url: str, test_return: Dict,
+                      mock_get: requests.models.Response):
         """
         Test for the 'json' method of the response returned by the 'get' method
         of the 'requests' module
