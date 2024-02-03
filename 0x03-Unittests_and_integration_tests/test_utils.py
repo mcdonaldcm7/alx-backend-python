@@ -1,4 +1,4 @@
-#!/usrbin/env python3
+#!/usr/bin/env python3
 """
 Task
 
@@ -76,8 +76,7 @@ class TestGetJson(unittest.TestCase):
         ("http://holberton.io", {"payload": False})
         ])
     @patch("requests.get")
-    def test_get_json(self, test_url: str, test_return: Dict,
-                      mock_get: requests.models.Response):
+    def test_get_json(self, test_url: str, test_return: Dict, mock_get: Any):
         """
         Test for the 'json' method of the response returned by the 'get' method
         of the 'requests' module
