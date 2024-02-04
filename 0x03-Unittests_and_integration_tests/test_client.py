@@ -54,7 +54,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ("google"),
         ("holberton")
         ])
-    def test_public_repos_url(self, org):
+    def test_public_repos_url(self, org: str):
         """
         Unit test for the _public_repos_url method
         """
