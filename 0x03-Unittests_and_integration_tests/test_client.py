@@ -29,26 +29,26 @@ class TestGithubOrgClient(unittest.TestCase):
     """
     Unittest for the GithubOrgClient class from the client module
     """
-    def side_effect(self, arg: Dict) -> Dict:
-        """
-        Returns the argument passed
-        """
-        return arg
 
     @parameterized.expand([
         ("google"),
         ("abc")
         ])
-    @patch("utils.get_json")
+    @patch("client.get_json")
     def test_org(self, org: str, mock_get_json: Any):
         """
         Test for the org method of the GithubOrgClient class
         """
+        mock_get_json.return_value = {
+                "url": "https://api.github.com/orgs/{}".format(org)}
         test_instance = GithubOrgClient(org)
+        result = test_instance.org
         url = "https://api.github.com/orgs/{}".format(org)
 
         self.assertIsInstance(test_instance.org, dict)
-        # mock_get_json.assert_called_once_with(url)
+        mock_get_json.assert_called_once_with(url)
+        self.assertEqual(result, {
+                "url": "https://api.github.com/orgs/{}".format(org)})
 
     @parameterized.expand([
         ("google"),
