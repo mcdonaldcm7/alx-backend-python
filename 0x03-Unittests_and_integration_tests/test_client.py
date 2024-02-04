@@ -34,6 +34,7 @@ get_json = __import__("utils").get_json
 
 class TestGithubOrgClient(unittest.TestCase):
     """
+    Unittest for the GithubOrgClient class from the client module
     """
     def side_effect(self, arg: Dict) -> Dict:
         """
@@ -48,6 +49,7 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch("utils.get_json")
     def test_org(self, org: str, mock_get_json: Any):
         """
+        Test for the org method of the GithubOrgClient class
         """
         test_instance = GithubOrgClient(org)
 
