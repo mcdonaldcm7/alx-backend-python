@@ -2,26 +2,25 @@
 """
 Task
 
-2. Mock HTTP calls
+3. Parameterize and patch
 
-Familiarize yourself with the 'utils.get_json' function.
+Implement the 'TestMemoize(unittest.TestCase)' class with a
+'test_memoize method'.
 
-Define the 'TestGetJson(unittest.TestCase)' class and implement the
-'TestGetJson.test_get_json' method to test that 'utils.get_json' returns the
-expected result.
+Inside 'test_memoize', define following class
 
-We don’t want to make any actual external HTTP calls. Use 'unittest.mock.patch'
-to patch 'requests.get'. Make sure it returns a 'Mock' object with a 'json'
-method that returns 'test_payload' which you parametrize alongside the
-'test_url' that you will pass to 'get_json' with the following inputs:
+    class TestClass:
 
-    test_url="http://example.com", test_payload={"payload": True}
-    test_url="http://holberton.io", test_payload={"payload": False}
+        def a_method(self):
+            return 42
 
-Test that the mocked 'get' method was called exactly once (per input) with
-'test_url' as argument.
+        @memoize
+        def a_property(self):
+            return self.a_method()
 
-Test that the output of 'get_json' is equal to 'test_payload'.
+Use 'unittest.mock.patch' to mock 'a_method'. Test that when calling
+'a_property' twice, the correct result is returned but 'a_method' is only
+called once using 'assert_called_once'.
 """
 import unittest
 import requests
@@ -32,6 +31,7 @@ from unittest.mock import patch, Mock
 
 access_nested_map = __import__("utils").access_nested_map
 get_json = __import__("utils").get_json
+memoize = __import__("utils").memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -89,3 +89,40 @@ class TestGetJson(unittest.TestCase):
 
         mock_get.assert_called_once_with(test_url)
         self.assertEqual(test_payload, test_return)
+
+
+class TestMemoize(unittest.TestCase):
+    """
+    Unit test for the 'memoize' method of the 'utils' module
+    """
+
+    def test_memoize(self):
+        """
+        Test for the correctness of the 'memoize' method of the 'utils' method
+        """
+        class TestClass:
+            """
+            Memoize test class
+            """
+            def a_method(self):
+                """
+                Returns the integer 42
+                """
+                return 42
+
+            @memoize
+            def a_property(self):
+                """
+                Call and return the value from 'a_method'
+                """
+                return self.a_method()
+
+        with patch.object(TestClass, "a_method", return_value=42) as mock:
+            test_class = TestClass()
+
+            test1 = test_class.a_property
+            test2 = test_class.a_property
+
+        mock.assert_called_once()
+        self.assertEqual(test1, 42)
+        self.assertEqual(test2, 42)
