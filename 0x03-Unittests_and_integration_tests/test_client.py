@@ -48,17 +48,22 @@ class TestGithubOrgClient(unittest.TestCase):
         url = "https://api.github.com/orgs/{}".format(org)
 
         self.assertIsInstance(test_instance.org, dict)
-        # mock_get_json.assert_called_once_with(url)
+        mock_get_json.assert_called_once_with(url)
 
-    def test_public_repos_url(self):
+    @parameterized.expand([
+        ("google"),
+        ("holberton")
+        ])
+    def test_public_repos_url(self, org):
         """
         Unit test for the _public_repos_url method
         """
         with patch("client.GithubOrgClient.org", new_callable=PropertyMock
                    ) as mock_org:
             mock_org.return_value = {
-                    "repos_url": "https://api.github.com/orgs/holberton/repos"}
-            test_instance = GithubOrgClient("holberton")
+                    "repos_url": (
+                        "https://api.github.com/orgs/{}/repos".format(org))}
+            test_instance = GithubOrgClient(org)
             result = test_instance._public_repos_url
-            self.assertEqual(result,
-                             "https://api.github.com/orgs/holberton/repos")
+            self.assertEqual(
+                    result, "https://api.github.com/orgs/{}/repos".format(org))
