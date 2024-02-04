@@ -29,7 +29,6 @@ from typing import (Dict, Any)
 
 
 GithubOrgClient = __import__("client").GithubOrgClient
-get_json = __import__("utils").get_json
 
 
 class TestGithubOrgClient(unittest.TestCase):
