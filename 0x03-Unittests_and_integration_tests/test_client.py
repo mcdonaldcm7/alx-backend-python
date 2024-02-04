@@ -2,25 +2,19 @@
 """
 Tasks
 
-4. Parameterize and patch as decorators
+5. Mocking a property
 
-Familiarize yourself with the client.GithubOrgClient class.
+memoize turns methods into properties. Read up on how to mock a property (see
+resource).
 
-In a new test_client.py file, declare the
-TestGithubOrgClient(unittest.TestCase) class and implement the test_org method.
+Implement the test_public_repos_url method to unit-test
+GithubOrgClient._public_repos_url.
 
-This method should test that GithubOrgClient.org returns the correct value.
+Use patch as a context manager to patch GithubOrgClient.org and make it return
+a known payload.
 
-Use @patch as a decorator to make sure get_json is called once with the
-expected argument but make sure it is not executed.
-
-Use @parameterized.expand as a decorator to parametrize the test with a couple
-of org examples to pass to GithubOrgClient, in this order:
-
-    - google
-    - abc
-
-Of course, no external HTTP calls should be made.
+Test that the result of _public_repos_url is the expected one based on the
+mocked payload.
 """
 import unittest
 from parameterized import parameterized
@@ -51,8 +45,19 @@ class TestGithubOrgClient(unittest.TestCase):
         Test for the org method of the GithubOrgClient class
         """
         test_instance = GithubOrgClient(org)
+        url = "https://api.github.com/orgs/{}".format(org)
 
         self.assertIsInstance(test_instance.org, dict)
-
-        url = "https://api.github.com/orgs/{}".format(org)
         mock_get_json.assert_called_once_with(url)
+
+    def test_public_repos_url(self):
+        """
+        """
+        with patch("client.GithubOrgClient.org", new_callable=PropertyMock
+                   ) as mock_org:
+            mock_org.return_value = {
+                    "repos_url": "https://api.github.com/orgs/google/repos"}
+            test_instance = GithubOrgClient("google")
+            result = test_instance._public_repos_url
+            self.assertEqual(result,
+                             "https://api.github.com/orgs/google/repos")
