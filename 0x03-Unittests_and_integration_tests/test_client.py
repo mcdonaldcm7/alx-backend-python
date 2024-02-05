@@ -2,20 +2,16 @@
 """
 Tasks
 
-6. More patching
+7. Parameterize
 
-Implement TestGithubOrgClient.test_public_repos to unit-test
-GithubOrgClient.public_repos.
+Implement TestGithubOrgClient.test_has_license to unit-test
+GithubOrgClient.has_license.
 
-Use @patch as a decorator to mock get_json and make it return a payload of your
-choice.
+Parametrize the test with the following inputs
 
-Use patch as a context manager to mock GithubOrgClient._public_repos_url and
-return a value of your choice.
-
-Test that the list of repos is what you expect from the chosen payload.
-
-Test that the mocked property and the mocked get_json was called once.
+repo={"license": {"key": "my_license"}}, license_key="my_license"
+repo={"license": {"key": "other_license"}}, license_key="my_license"
+You should also parameterize the expected returned value.
 """
 import unittest
 from parameterized import parameterized
@@ -91,3 +87,15 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(results, [org.upper()])
         mock_get_json.assert_called_once()
         mock_property.assert_called_once()
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)
+        ])
+    def test_has_license(self, license: Dict, license_key: str,
+                         has_license: bool):
+        """
+        Unittest for GithubOrgClient static method `has_license`
+        """
+        result_has_license = GithubOrgClient.has_license(license, license_key)
+        self.assertEqual(result_has_license, has_license)
