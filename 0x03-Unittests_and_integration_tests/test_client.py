@@ -88,4 +88,5 @@ class TestGithubOrgClient(unittest.TestCase):
 
         self.assertEqual(result, [org.upper()])
         mock_get_json.assert_called_once()
+        mock_get_json.assert_called_once_with(repos_url)
         mock_property.assert_called_once()
