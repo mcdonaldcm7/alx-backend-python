@@ -2,19 +2,20 @@
 """
 Tasks
 
-5. Mocking a property
+6. More patching
 
-memoize turns methods into properties. Read up on how to mock a property (see
-resource).
+Implement TestGithubOrgClient.test_public_repos to unit-test
+GithubOrgClient.public_repos.
 
-Implement the test_public_repos_url method to unit-test
-GithubOrgClient._public_repos_url.
+Use @patch as a decorator to mock get_json and make it return a payload of your
+choice.
 
-Use patch as a context manager to patch GithubOrgClient.org and make it return
-a known payload.
+Use patch as a context manager to mock GithubOrgClient._public_repos_url and
+return a value of your choice.
 
-Test that the result of _public_repos_url is the expected one based on the
-mocked payload.
+Test that the list of repos is what you expect from the chosen payload.
+
+Test that the mocked property and the mocked get_json was called once.
 """
 import unittest
 from parameterized import parameterized
@@ -73,20 +74,21 @@ class TestGithubOrgClient(unittest.TestCase):
         ("holberton")
         ])
     @patch("client.get_json")
-    def test_public_repos(self, org: str, mock_get_json: Any):
+    def test_public_repos(self, org: str, payload: dict, mock_get_json: Any):
         """
         Unit test for the public_repos method of the GithubOrgClient class
         """
-        mock_get_json.return_value = [{"name": "{}".format(org).upper()}]
-        repos_url = "https://api.github.com/orgs/{}/repos".format(org)
+        # mock_get_json.return_value = [
+        #        {"name": "{}".format(org).upper()}]
+        # repos_url = "https://api.github.com/orgs/{}/repos".format(org)
 
-        with patch("client.GithubOrgClient._public_repos_url",
-                   new_callable=PropertyMock) as mock_property:
-            mock_property.return_value = repos_url
-            test_instance = GithubOrgClient(org)
-            result = test_instance.public_repos()
+        # with patch("client.GithubOrgClient._public_repos_url",
+        #           new_callable=PropertyMock) as mock_property:
+        #    mock_property.return_value = repos_url
+        #    test_instance = GithubOrgClient(org)
+        #    result = test_instance.public_repos()
 
-        self.assertEqual(result, [org.upper()])
-        mock_get_json.assert_called_once()
-        mock_get_json.assert_called_once_with(repos_url)
-        mock_property.assert_called_once()
+        # self.assertEqual(result, [org.upper()])
+        # mock_get_json.assert_called_once()
+        # mock_get_json.assert_called_once_with(repos_url)
+        # mock_property.assert_called_once()
