@@ -74,21 +74,20 @@ class TestGithubOrgClient(unittest.TestCase):
         ("holberton")
         ])
     @patch("client.get_json")
-    def test_public_repos(self, org: str, payload: dict, mock_get_json: Any):
+    def test_public_repos(self, org: str, mock_get_json: Any):
         """
         Unit test for the public_repos method of the GithubOrgClient class
         """
-        # mock_get_json.return_value = [
-        #        {"name": "{}".format(org).upper()}]
-        # repos_url = "https://api.github.com/orgs/{}/repos".format(org)
+        mock_get_json.return_value = [{"name": org.upper()}]
+        repos_url = "https://api.github.com/orgs/{}/repos".format(org)
 
-        # with patch("client.GithubOrgClient._public_repos_url",
-        #           new_callable=PropertyMock) as mock_property:
-        #    mock_property.return_value = repos_url
-        #    test_instance = GithubOrgClient(org)
-        #    result = test_instance.public_repos()
+        with patch("client.GithubOrgClient._public_repos_url",
+                   new_callable=PropertyMock) as mock_property:
+            mock_property.return_value = repos_url
 
-        # self.assertEqual(result, [org.upper()])
-        # mock_get_json.assert_called_once()
-        # mock_get_json.assert_called_once_with(repos_url)
-        # mock_property.assert_called_once()
+            test_instance = GithubOrgClient(org)
+            results = test_instance.public_repos()
+
+        self.assertEqual(results, [org.upper()])
+        mock_get_json.assert_called_once()
+        mock_property.assert_called_once()
