@@ -135,8 +135,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """
         cls.get_patcher.stop()
 
-    def test_public_repos
-    """
-    Unit test for the GithubOrgClient.public_repos
-    """
-    pass
+    def test_public_repos(self):
+        """
+        Unit test for the GithubOrgClient.public_repos
+        """
+        pass
