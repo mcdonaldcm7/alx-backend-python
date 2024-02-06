@@ -14,12 +14,13 @@ repo={"license": {"key": "other_license"}}, license_key="my_license"
 You should also parameterize the expected returned value.
 """
 import unittest
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from unittest.mock import patch, Mock, PropertyMock
 from typing import (Dict, Any)
 
 
 GithubOrgClient = __import__("client").GithubOrgClient
+TEST_PAYLOAD = __import__("fixtures").TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -99,3 +100,38 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         result = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(result, has_license)
+
+
+@parameterized_class(
+        ("org_payload", "repos_payload", "expected_repos", "apache2_repos"), [
+            (TEST_PAYLOAD[0][0], TEST_PAYLOAD[0][1], TEST_PAYLOAD[0][2],
+             TEST_PAYLOAD[0][3])
+            ])
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration test for the GithubOrgClient.public_repos method
+    """
+
+    def side_effect(self, url: str):
+        """
+        Returns the correct repo's json based on the url passed
+        """
+        for repo in self.repos_payload:
+            if repo["url"] == url:
+                return repo
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Mocks `requests.get` to return example payloads found in the fixtures
+        """
+        cls.get_patcher = patch("requests.get")
+        cls.get_patcher.start()
+        cls.get_patcher.side_effect = cls.side_effect
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Stops the patcher started in the setUpClass method
+        """
+        cls.get_patcher.stop()
