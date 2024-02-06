@@ -2,16 +2,15 @@
 """
 Tasks
 
-7. Parameterize
+9. Integration tests
 
-Implement TestGithubOrgClient.test_has_license to unit-test
-GithubOrgClient.has_license.
+Implement the test_public_repos method to test GithubOrgClient.public_repos.
 
-Parametrize the test with the following inputs
+Make sure that the method returns the expected results based on the fixtures.
 
-repo={"license": {"key": "my_license"}}, license_key="my_license"
-repo={"license": {"key": "other_license"}}, license_key="my_license"
-You should also parameterize the expected returned value.
+Implement test_public_repos_with_license to test the public_repos with the
+argument license="apache-2.0" and make sure the result matches the expected
+value from the fixtures.
 """
 import unittest
 from parameterized import parameterized, parameterized_class
@@ -135,3 +134,9 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         Stops the patcher started in the setUpClass method
         """
         cls.get_patcher.stop()
+
+    def test_public_repos
+    """
+    Unit test for the GithubOrgClient.public_repos
+    """
+    pass
