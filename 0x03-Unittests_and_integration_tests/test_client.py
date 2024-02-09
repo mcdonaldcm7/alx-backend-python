@@ -158,8 +158,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             mock_repos.return_value = self.repos_payload
             test_instance = GithubOrgClient("google")
             result = test_instance.public_repos(license="apache-2.0")
+
+        with patch("client.GithubOrgClient.public_repos",
+                   return_value=result) as mock_public_repos:
+            test_instance2 = GithubOrgClient("google")
+            test_instance2.public_repos(license="apache-2.0")
         self.assertEqual(result, self.apache2_repos)
         mock_repos.assert_called_once()
+        mock_public_repos.assert_called_once_with(license="apache-2.0")
 
     # def test_has_license(self):
     #    """
