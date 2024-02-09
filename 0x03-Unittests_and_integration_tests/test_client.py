@@ -150,6 +150,18 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     def test_public_repos_with_license(self):
         """
+        Unittest for the GithubOrgClient.public_repos with the argument
+        license="apache-2.0"
+        """
+        with patch("client.GithubOrgClient.repos_payload",
+                   new_callable=PropertyMock) as mock_repos:
+            mock_repos.return_value = self.repos_payload
+            test_instance = GithubOrgClient("google")
+            result = test_instance.public_repos(license="apache-2.0")
+        self.assertEqual(result, self.apache2_repos)
+
+    def test_has_license(self):
+        """
         Unittest for the GithubOrgClient.has_license with the argument
         license="apache-2.0"
         """
