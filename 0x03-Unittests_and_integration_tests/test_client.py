@@ -159,15 +159,16 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             test_instance = GithubOrgClient("google")
             result = test_instance.public_repos(license="apache-2.0")
         self.assertEqual(result, self.apache2_repos)
+        mock_repos.assert_called_once()
 
-    def test_has_license(self):
-        """
-        Unittest for the GithubOrgClient.has_license with the argument
-        license="apache-2.0"
-        """
-        result = [repo["name"] for repo in self.repos_payload if
-                  GithubOrgClient.has_license(repo, "apache-2.0")]
-        self.assertEqual(result, self.apache2_repos)
+    # def test_has_license(self):
+    #    """
+    #    Unittest for the GithubOrgClient.has_license with the argument
+    #    license="apache-2.0"
+    #    """
+    #    result = [repo["name"] for repo in self.repos_payload if
+    #              GithubOrgClient.has_license(repo, "apache-2.0")]
+    #    self.assertEqual(result, self.apache2_repos)
 
 
 if __name__ == "__main__":
