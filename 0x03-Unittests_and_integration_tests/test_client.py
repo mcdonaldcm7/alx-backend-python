@@ -176,7 +176,3 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     #    result = [repo["name"] for repo in self.repos_payload if
     #              GithubOrgClient.has_license(repo, "apache-2.0")]
     #    self.assertEqual(result, self.apache2_repos)
-
-
-if __name__ == "__main__":
-    unittest.main()
