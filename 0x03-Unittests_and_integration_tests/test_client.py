@@ -65,26 +65,26 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(
                     result, "https://api.github.com/orgs/{}/repos".format(org))
 
-    @parameterized.expand([
-        ("google"),
-        ("holberton")
-        ])
     @patch("client.get_json")
-    def test_public_repos(self, org: str, mock_get_json: Any):
+    def test_public_repos(self, mock_get_json: Any):
         """
         Unit test for the public_repos method of the GithubOrgClient class
         """
-        mock_get_json.return_value = [{"name": org.upper()}]
-        repos_url = "https://api.github.com/orgs/{}/repos".format(org)
+        mock_get_json.return_value = [
+                {"name": "episodes.dart"}, {"name": "cpp-netlib"},
+                {"name": "dagger"}, {"name": "ios-webkit-debug-proxy"}]
+        expected_repos = ["episodes.dart", "cpp-netlib", "dagger",
+                          "ios-webkit-debug-proxy"]
+        repos_url = "https://api.github.com/orgs/google/repos"
 
         with patch("client.GithubOrgClient._public_repos_url",
                    new_callable=PropertyMock) as mock_property:
             mock_property.return_value = repos_url
 
-            test_instance = GithubOrgClient(org)
+            test_instance = GithubOrgClient("google")
             results = test_instance.public_repos()
 
-        self.assertEqual(results, [org.upper()])
+        self.assertEqual(results, expected_repos)
         mock_get_json.assert_called_once()
         mock_property.assert_called_once()
 
@@ -163,6 +163,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
                    return_value=result) as mock_public_repos:
             test_instance2 = GithubOrgClient("google")
             test_instance2.public_repos(license="apache-2.0")
+
         self.assertEqual(result, self.apache2_repos)
         mock_repos.assert_called_once()
         mock_public_repos.assert_called_once_with(license="apache-2.0")
